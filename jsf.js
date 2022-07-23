@@ -35,8 +35,8 @@ export default class Jsf {
     this['+'] = `(+(${this.getString('11e100')})+[])[${this.getNumber(4)}]`;
     this['-'] = `(+(${this.getString('.0000001')})+[])[${this.getNumber(2)}]`;
     this.d = `(${this.undefined})[${this.getNumber(2)}]`;
-    this.I = `(+(${this.getString('1e1000')})+[])[${this.zero}]`
     this.A = `([][${this.getString('entries')}]()+[])[${this.getNumber(8)}]`
+    this.I = `(+(${this.getString('1e1000')})+[])[${this.zero}]`
     
     /**  
      *   3 = c, 6 = o, 8 = ' ', 15 = (, 16 = ), 18 = {,  20 = [,  32 = ],  34 = }
@@ -49,8 +49,9 @@ export default class Jsf {
     
     this.constructorStr = this.getString('constructor')
     /**  
-     *   11 = m,
+     *   11 = m, 12 = b
      *  (0)['constructor']+[] => 'function Number() { [native code] }' */
+    this.b = `((${this.zero})[${this.getString('constructor')}]+[])[${this.convertTwoDigitsToString(12)}]`;
     this.m = `((${this.zero})[${this.getString('constructor')}]+[])[${this.convertTwoDigitsToString(11)}]`;
     this.Function = `(${this.filter})[${this.constructorStr}]`
     this.FunctionStr = `(${this.filter})[${this.constructorStr}]+[]`
@@ -69,7 +70,6 @@ export default class Jsf {
     this.S = `(${this.a}[${this.constructorStr}]+[])[${this.getNumber(9)}]`;
     this.g = `(${this.a}[${this.constructorStr}]+[])[${this['1']}+[${this.getNumber(4)}]]`;
     this.toStringStr = this.getString('toString')
-    this.b = this.getMissingLowerCaseLetter('b')
     this.h = this.getMissingLowerCaseLetter('h')
     this.j = this.getMissingLowerCaseLetter('j')
     this.k = this.getMissingLowerCaseLetter('k')
@@ -79,10 +79,11 @@ export default class Jsf {
     this.w = this.getMissingLowerCaseLetter('w')
     this.x = this.getMissingLowerCaseLetter('x')
     this.y = this.getMissingLowerCaseLetter('y')
+    this.z = this.getMissingLowerCaseLetter('z')
 
     this["'"] = this.outputCatchErrPropOfUndefAt(56)
-    this["U"] = this.outputCatchErrPropOfUndefAt(0)
-    this["T"] = this.outputCatchErrPropOfUndefAt(9)
+    this.U = this.outputCatchErrPropOfUndefAt(0)
+    this.T = this.outputCatchErrPropOfUndefAt(9)
   }
 
   getNumber(n) {

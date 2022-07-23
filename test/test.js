@@ -103,6 +103,7 @@ describe("acquire `'` and \\ to be able to encode unicode (\\uXXX)", () => {
   console.log(jsf["'"])
   it(`acquire "'" from try catch of accessing a key of undefined`, () => {
     expect(eval(jsf["'"])).equals("'");
+    expect(eval(jsf["I"])).equals("I");
   });
 
 });
