@@ -48,16 +48,18 @@ describe('acquire the "constructor" letters ("c", "o", "n", "s", "t", "r", "u")'
     expect(eval(jsf.getString('filter'))).equals('filter');
   });
 
-  it('jsf.getString("c") should output "c" (string) ("([][${jsf.getString(\'filter\')}]+[])[${jsf.getNumber(3)}]" == "c")', () => {
+  it('jsf.getString("c") should output "c" (string) ("([][${jsf.filterStr}]+[])[${jsf.getNumber(3)]" == "c")', () => {
     expect(eval(jsf.getString('c')), 'output' + jsf.getString('c')).equals('c');
   });
-  it('jsf.getString("o") should output "o" (string) ("([][${jsf.getString(\'filter\')}]+[])[${jsf.getNumber(6)}]" == "o")', () => {
+  it('jsf.getString("o") should output "o" (string) ("([][${jsf.filterStr}]+[])[${jsf.getNumber(6)]" == "o")', () => {
     expect(eval(jsf.getString('o')), 'output' + jsf.getString('o')).equals('o');
   });
   it('jsf.getString("constructor") should output "constructor" (string)', () => {
     expect(eval(jsf.getString('constructor'))).equals('constructor');
   });
   it(`jsf.getString should print the rest of the acquired characters from "${[].filter}"`, () => {
+    expect(eval(jsf.getString(' '))).equals(' ');
+    expect(eval(jsf.getString('I'))).equals('I');
     expect(eval(jsf.getString('('))).equals('(');
     expect(eval(jsf.getString(')'))).equals(')');
     expect(eval(jsf.getString('{'))).equals('{');
@@ -65,7 +67,9 @@ describe('acquire the "constructor" letters ("c", "o", "n", "s", "t", "r", "u")'
     expect(eval(jsf.getString(']'))).equals(']');
     expect(eval(jsf.getString('}'))).equals('}');
   });
-
+  it(`jsf.FunctionStr should output "${Function.toString()}" (string)`, () => {
+    expect(eval(jsf.FunctionStr)).equals(Function.toString());
+  });
 });
 
 describe('acquire the toString ability ie. the "S" and the "g" ', () => {
@@ -74,10 +78,10 @@ describe('acquire the toString ability ie. the "S" and the "g" ', () => {
       String.toString()
     );
   });
-  it('jsf.getString("S") should output "S" (string) ("(${map.a}[${jsf.getString(\'constructor\')}]+[])[${jsf.getNumber(6)}]" == "S")', () => {
+  it('jsf.getString("S") should output "S" (string) ("(${this.a}[${jsf.getString(\'constructor\')}]+[])[${jsf.getNumber(6)}]" == "S")', () => {
     expect(eval(jsf.getString('S'))).equals('S');
   });
-  it('jsf.getString("g") should output "g" (string) ("(${map.a}[${jsf.getString(\'constructor\')}]+[])[${map[\'1\']}+[jsf.getNumber(4)]]" == "g")', () => {
+  it('jsf.getString("g") should output "g" (string) ("(${this.a}[${jsf.getString(\'constructor\')}]+[])[${this[\'1\']}+[jsf.getNumber(4)]]" == "g")', () => {
     expect(eval(jsf.getString('g'))).equals('g');
   });
   it('jsf.getString("toString") should output "toString" (string)', () => {
@@ -85,12 +89,20 @@ describe('acquire the toString ability ie. the "S" and the "g" ', () => {
   });
 });
 
-const additionalLetters = ['b', 'h', 'j', 'm', 'p', 'q', 'v', 'w', 'x', 'y', 'z'];
-describe("acquire letters from toString method ('b', 'h', 'j', 'm', 'p', 'q', 'v', 'w', 'x', 'y', 'z')", () => {
+const additionalLetters = ['b', 'h', 'j', 'p', 'q', 'v', 'w', 'x', 'y', 'z'];
+describe("acquire letters from toString method ('b', 'h', 'j', 'p', 'q', 'v', 'w', 'x', 'y', 'z')", () => {
   
   additionalLetters.forEach((letter, i) => {
-    it(`jsf.getMissingLowerCaseLetter("${letter}") should output "${letter}" (string) ("(${letter.charCodeAt(0) - 87})[jsf.toStringStr](${letter.charCodeAt(0) - 86}})" == "${letter}")`, () => {
+    it(`jsf.getMissingLowerCaseLetter("${letter}") should output "${letter}" (string) ("(${letter.charCodeAt(0) - 87})[jsf.toStringStr](${letter.charCodeAt(0) - 86})" == "${letter}")`, () => {
       expect(eval(jsf.getMissingLowerCaseLetter(letter))).equals(letter);
     });
   })  
+});
+
+describe("acquire `'` and \\ to be able to encode unicode (\\uXXX)", () => {
+  console.log(jsf["'"])
+  it(`acquire "'" from try catch of accessing a key of undefined`, () => {
+    expect(eval(jsf["'"])).equals("'");
+  });
+
 });
