@@ -57,7 +57,7 @@ describe('acquire the "constructor" letters ("c", "o", "n", "s", "t", "r", "u")'
   it('jsf.getString("constructor") should output "constructor" (string)', () => {
     expect(eval(jsf.getString('constructor'))).equals('constructor');
   });
-  it('jsf.getString should print the rest of the acquired characters', () => {
+  it(`jsf.getString should print the rest of the acquired characters from "${[].filter}"`, () => {
     expect(eval(jsf.getString('('))).equals('(');
     expect(eval(jsf.getString(')'))).equals(')');
     expect(eval(jsf.getString('{'))).equals('{');
@@ -83,4 +83,14 @@ describe('acquire the toString ability ie. the "S" and the "g" ', () => {
   it('jsf.getString("toString") should output "toString" (string)', () => {
     expect(eval(jsf.getString('toString'))).equals('toString');
   });
+});
+
+const additionalLetters = ['b', 'h', 'j', 'm', 'p', 'q', 'v', 'w', 'x', 'y', 'z'];
+describe("acquire letters from toString method ('b', 'h', 'j', 'm', 'p', 'q', 'v', 'w', 'x', 'y', 'z')", () => {
+  
+  additionalLetters.forEach((letter, i) => {
+    it(`jsf.getMissingLowerCaseLetter("${letter}") should output "${letter}" (string) ("(${letter.charCodeAt(0) - 87})[jsf.toStringStr](${letter.charCodeAt(0) - 86}})" == "${letter}")`, () => {
+      expect(eval(jsf.getMissingLowerCaseLetter(letter))).equals(letter);
+    });
+  })  
 });

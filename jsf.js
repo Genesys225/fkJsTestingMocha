@@ -11,18 +11,18 @@ export default class Jsf {
   }
 
   init() {
-    this.a = `(${this.falseStr})[${this.getNumber(1)}]`;
+    this.a = `(${this.falseStr})[${this.one}]`;
     this.e = `(${this.trueStr})[${this.getNumber(3)}]`;
-    this.f = `(${this.falseStr})[${this.getNumber(0)}]`;
+    this.f = `(${this.falseStr})[${this.zero}]`;
     this.i = `(${this.undefined})[${this.getNumber(5)}]`;
     this.l = `(${this.falseStr})[${this.getNumber(2)}]`;
-    this.n = `(${this.undefined})[${this.getNumber(1)}]`;
-    this.r = `(${this.trueStr})[${this.getNumber(1)}]`;
+    this.n = `(${this.undefined})[${this.one}]`;
+    this.r = `(${this.trueStr})[${this.one}]`;
     this.s = `(${this.falseStr})[${this.getNumber(3)}]`;
     this.u = `(${this.trueStr})[${this.getNumber(2)}]`;
-    this.t = `(${this.trueStr})[${this.getNumber(0)}]`;
-    this['0'] = `(${this.getNumber(0)})+[]`;
-    this['1'] = `(${this.getNumber(1)})+[]`;
+    this.t = `(${this.trueStr})[${this.zero}]`;
+    this['0'] = `(${this.zero})+[]`;
+    this['1'] = `(${this.one})+[]`;
     this['2'] = `(${this.getNumber(2)})+[]`;
     this['3'] = `(${this.getNumber(3)})+[]`;
     this['4'] = `(${this.getNumber(4)})+[]`;
@@ -32,26 +32,47 @@ export default class Jsf {
     this['8'] = `(${this.getNumber(8)})+[]`;
     this['9'] = `(${this.getNumber(9)})+[]`;
     this.d = `(${this.undefined})[${this.getNumber(2)}]`;
+    
     /**  
      *   3 = c, 6 = o, 8 = ' ', 15 = (, 16 = ), 18 = {,  20 = [,  32 = ],  34 = },
      *  'a'['constructor']+[] => 'function filter() { [native code] }' */
-    this.c = `([][${this.getString('filter')}]+[])[${this.getNumber(3)}]`;
-    this.o = `([][${this.getString('filter')}]+[])[${this.getNumber(6)}]`;
-    this[' '] = `([][${this.getString('filter')}]+[])[${this.getNumber(8)}]`;
-    this['('] = `([][${this.getString('filter')}]+[])[${this['1']}+[${this.getNumber(5)}]]`;
-    this[')'] = `([][${this.getString('filter')}]+[])[${this['1']}+[${this.getNumber(6)}]]`;
-    this['{'] = `([][${this.getString('filter')}]+[])[${this['1']}+[${this.getNumber(8)}]]`;
-    this['['] = `([][${this.getString('filter')}]+[])[${this['2']}+[${this.getNumber(0)}]]`;
-    this[']'] = `([][${this.getString('filter')}]+[])[${this['3']}+[${this.getNumber(2)}]]`;
-    this['}'] = `([][${this.getString('filter')}]+[])[${this['3']}+[${this.getNumber(4)}]]`;
+    this.filterStr = this.getString('filter')
+    this.c = `([][${this.filterStr}]+[])[${this.getNumber(3)}]`;
+    this.o = `([][${this.filterStr}]+[])[${this.getNumber(6)}]`;
+
+    this.constructorStr = this.getString('constructor')
+    this[' '] = `([][${this.filterStr}]+[])[${this.getNumber(8)}]`;
+    this['('] = `([][${this.filterStr}]+[])[${this['1']}+[${this.getNumber(5)}]]`;
+    this[')'] = `([][${this.filterStr}]+[])[${this['1']}+[${this.getNumber(6)}]]`;
+    this['{'] = `([][${this.filterStr}]+[])[${this['1']}+[${this.getNumber(8)}]]`;
+    this['['] = `([][${this.filterStr}]+[])[${this['2']}+[${this.zero}]]`;
+    this[']'] = `([][${this.filterStr}]+[])[${this['3']}+[${this.getNumber(2)}]]`;
+    this['}'] = `([][${this.filterStr}]+[])[${this['3']}+[${this.getNumber(4)}]]`;
 
     /** 
      *  9 = S, 14 = g
      *  'a'['constructor']+[] => 'function String() { [native code] }' */
-    this.S = `(${this.a}[${this.getString('constructor')}]+[])[${this.getNumber(9)}]`;
-    this.g = `(${this.a}[${this.getString('constructor')}]+[])[${this['1']}+[${this.getNumber(4)}]]`;
-    this.filterStr = this.getString('filter')
+    this.S = `(${this.a}[${this.constructorStr}]+[])[${this.getNumber(9)}]`;
+    this.g = `(${this.a}[${this.constructorStr}]+[])[${this['1']}+[${this.getNumber(4)}]]`;
     this.toStringStr = this.getString('toString')
+    this.b = this.getMissingLowerCaseLetter('b')
+    this.h = this.getMissingLowerCaseLetter('h')
+    this.j = this.getMissingLowerCaseLetter('j')
+    this.k = this.getMissingLowerCaseLetter('k')
+    this.m = this.getMissingLowerCaseLetter('m')
+    this.p = this.getMissingLowerCaseLetter('p')
+    this.q = this.getMissingLowerCaseLetter('q')
+    this.v = this.getMissingLowerCaseLetter('v')
+    this.w = this.getMissingLowerCaseLetter('w')
+    this.x = this.getMissingLowerCaseLetter('x')
+    this.y = this.getMissingLowerCaseLetter('y')
+  }
+
+  getMissingLowerCaseLetter(c) {
+    if (c.charCodeAt(0) < 98 || c.charCodeAt(0) > 122) {
+      return false;
+    }
+    return `(${c.charCodeAt(0) - 87})[${this.toStringStr}](${c.charCodeAt(0) - 86})`
   }
 
   getNumber(n) {
