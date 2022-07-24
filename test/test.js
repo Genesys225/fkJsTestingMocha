@@ -89,8 +89,8 @@ describe('acquire the toString ability ie. the "S" and the "g" ', () => {
   });
 });
 
-const additionalLetters = ['b', 'h', 'j', 'p', 'q', 'v', 'w', 'x', 'y', 'z'];
-describe("acquire letters from toString method ('b', 'h', 'j', 'p', 'q', 'v', 'w', 'x', 'y', 'z')", () => {
+const additionalLetters = ['h', 'j', 'p', 'q', 'v', 'w', 'x', 'y', 'z'];
+describe("acquire letters from toString method ('h', 'j', 'p', 'q', 'v', 'w', 'x', 'y', 'z')", () => {
   
   additionalLetters.forEach((letter, i) => {
     it(`jsf.getMissingLowerCaseLetter("${letter}") should output "${letter}" (string) ("(${letter.charCodeAt(0) - 87})[jsf.toStringStr](${letter.charCodeAt(0) - 86})" == "${letter}")`, () => {
@@ -99,11 +99,23 @@ describe("acquire letters from toString method ('b', 'h', 'j', 'p', 'q', 'v', 'w
   })  
 });
 
-describe("acquire `'` and \\ to be able to encode unicode (\\uXXX)", () => {
-  console.log(jsf["'"])
-  it(`acquire "'" from try catch of accessing a key of undefined`, () => {
+describe("acquire `R` and E to be able to encode RegEx", () => {
+  it(`String().normalize(false) => RangeError: The normalization form should be one of NFC, NFD, NFKC, NFKD.`, () => {
+    expect(eval(jsf.normalizeErr)).equals("String().normalize(false)");
+    expect(eval(jsf.R)).equals("R");
+    expect(eval(jsf.E)).equals("E");
+  });
+});
+
+describe("acquire `/` and \\ to be able to encode unicode  (\\uXXX) eventually", () => {
+  it(`acquire "/" from executing RegEx() => /(?:)/ god know why :)`, () => {
+    expect(eval(jsf.outputRegExEvoke(0))).equals("/");
+    expect(eval(jsf.outputRegExEvoke(2))).equals("?");
+    expect(eval(jsf.outputRegExEvoke(3))).equals(":");
+  });
+  it(`acquire "\\" from executing RegEx('/') => /\\//`, () => {
     expect(eval(jsf["'"])).equals("'");
-    expect(eval(jsf["I"])).equals("I");
+    expect(eval(jsf['\\'])).equals('\\');
   });
 
 });

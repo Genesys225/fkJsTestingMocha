@@ -21,6 +21,7 @@ export default class Jsf {
     this.s = `(${this.falseStr})[${this.getNumber(3)}]`;
     this.u = `(${this.trueStr})[${this.getNumber(2)}]`;
     this.t = `(${this.trueStr})[${this.zero}]`;
+    this.ArrayEntriesStr = `[][${this.getString('entries')}]()+[]`
     this['0'] = `(${this.zero})+[]`;
     this['1'] = `(${this.one})+[]`;
     this['2'] = `(${this.getNumber(2)})+[]`;
@@ -60,9 +61,9 @@ export default class Jsf {
     this['('] = `(${this.filterMtdStr})[${this['1']}+[${this.getNumber(5)}]]`;
     this[')'] = `(${this.filterMtdStr})[${this['1']}+[${this.getNumber(6)}]]`;
     this['{'] = `(${this.filterMtdStr})[${this['1']}+[${this.getNumber(8)}]]`;
-    this['['] = `(${this.filterMtdStr})[${this['2']}+[${this.zero}]]`;
-    this[']'] = `(${this.filterMtdStr})[${this['3']}+[${this.getNumber(2)}]]`;
-    this['}'] = `(${this.filterMtdStr})[${this['3']}+[${this.getNumber(4)}]]`;
+    this['['] = `(${this.ArrayEntriesStr})[${this.zero}]`;
+    this[']'] = `(${this.ArrayEntriesStr})[${this.convertTwoDigitsToString(22)}]`;
+    this['}'] = `(${this.filterMtdStr})[${this.getString('slice')}](${this.getString('-1')})`;
 
     /** 
      *  9 = S, 14 = g
@@ -80,10 +81,17 @@ export default class Jsf {
     this.x = this.getMissingLowerCaseLetter('x')
     this.y = this.getMissingLowerCaseLetter('y')
     this.z = this.getMissingLowerCaseLetter('z')
-
-    this["'"] = this.outputCatchErrPropOfUndefAt(56)
-    this.U = this.outputCatchErrPropOfUndefAt(0)
-    this.T = this.outputCatchErrPropOfUndefAt(9)
+    this.normalizeErr = this.getString('String().normalize(false)');
+    
+    
+    // this["'"] = this.outputCatchErrPropOfUndefAt(56)
+    this.E = this.outputCatchRangeErrProp(5)
+    this.R = this.outputCatchRangeErrProp(0)
+    this['/'] = this.outputRegExEvoke(0)
+    this['?'] = this.outputRegExEvoke(2)
+    this[':'] = this.outputRegExEvoke(3)
+    this["'"] = `${this.execute(`try{Function([]+[[]].concat([[]]))()}catch(a){return (a+[])[30]}`)}`
+    this['\\'] = `${this.execute(`return (RegExp('/')+[])[1]`)}`
   }
 
   getNumber(n) {
@@ -111,13 +119,17 @@ export default class Jsf {
     const radixEncoded = this.convertTwoDigitsToString(c.charCodeAt(0) - 86)
     return `(+(${charNumEncoded}))[${this.toStringStr}](${radixEncoded})`
   }
-
-  outputCatchErrPropOfUndefAt(n) {
-    return `${this.Function}(${this.getString("try{[][0][0]}catch(a){return (a+[])[" + n + "]}")})()`
-  }
-
+  
   execute(s) {
     return `${this.Function}(${this.getString(s)})()`;
+  }
+
+  outputCatchRangeErrProp(n) {
+    return this.execute('try{String().normalize(false)}catch(a){return (a+[])[' + n + ']}')
+  }
+
+  outputRegExEvoke(n) {
+    return this.execute('return (RegExp()+[])[' + n + ']')
   }
 }
 
