@@ -52,15 +52,15 @@ export default class Jsf {
     /**  
      *   11 = m, 12 = b
      *  (0)['constructor']+[] => 'function Number() { [native code] }' */
-    this.b = `((${this.zero})[${this.getString('constructor')}]+[])[${this.convertTwoDigitsToString(12)}]`;
-    this.m = `((${this.zero})[${this.getString('constructor')}]+[])[${this.convertTwoDigitsToString(11)}]`;
+    this.b = `((${this.zero})[${this.constructorStr}]+[])[${this.convertTwoDigitsToString(12)}]`;
+    this.m = `((${this.zero})[${this.constructorStr}]+[])[${this.convertTwoDigitsToString(11)}]`;
     this.Function = `(${this.filter})[${this.constructorStr}]`
     this.FunctionStr = `(${this.filter})[${this.constructorStr}]+[]`
     this.F = `(${this.FunctionStr})[${this.getNumber(9)}]`;
     this[' '] = `(${this.filterMtdStr})[${this.getNumber(8)}]`;
-    this['('] = `(${this.filterMtdStr})[${this['1']}+[${this.getNumber(5)}]]`;
-    this[')'] = `(${this.filterMtdStr})[${this['1']}+[${this.getNumber(6)}]]`;
-    this['{'] = `(${this.filterMtdStr})[${this['1']}+[${this.getNumber(8)}]]`;
+    this['('] = `(${this.filterMtdStr})[${this.one}+[${this.getNumber(5)}]]`;
+    this[')'] = `(${this.filterMtdStr})[${this.one}+[${this.getNumber(6)}]]`;
+    this['{'] = `(${this.filterMtdStr})[${this.one}+[${this.getNumber(8)}]]`;
     this['['] = `(${this.ArrayEntriesStr})[${this.zero}]`;
     this[']'] = `(${this.ArrayEntriesStr})[${this.convertTwoDigitsToString(22)}]`;
     this['}'] = `(${this.filterMtdStr})[${this.getString('slice')}](${this.getString('-1')})`;
@@ -82,16 +82,15 @@ export default class Jsf {
     this.y = this.getMissingLowerCaseLetter('y')
     this.z = this.getMissingLowerCaseLetter('z')
     this.normalizeErr = this.getString('String().normalize(false)');
-    
-    
-    // this["'"] = this.outputCatchErrPropOfUndefAt(56)
-    this.E = this.outputCatchRangeErrProp(5)
-    this.R = this.outputCatchRangeErrProp(0)
-    this['/'] = this.outputRegExEvoke(0)
-    this['?'] = this.outputRegExEvoke(2)
-    this[':'] = this.outputRegExEvoke(3)
-    this["'"] = `${this.execute(`try{Function([]+[[]].concat([[]]))()}catch(a){return (a+[])[30]}`)}`
-    this['\\'] = `${this.execute(`return (RegExp('/')+[])[1]`)}`
+    this.E = this.outputCatchRangeErrProp(5);
+    this.R = this.outputCatchRangeErrProp(0);
+    this['/'] = this.outputRegExEvoke(0);
+    this['?'] = this.outputRegExEvoke(2);
+    this[':'] = this.outputRegExEvoke(3);
+    this["'"] = `${this.execute(`try{Function([]+[[]].concat([[]]))()}catch(a){return (a+[])[30]}`)}`;
+    this[","] = `${this.execute(`try{Function([]+[[]].concat([[]]))()}catch(a){return (a+[])[31]}`)}`;
+    this['\\'] = `${this.execute(`return (RegExp('/')+[])[1]`)}`;
+    this.C = this.execute(`return \'\\u0043\'`);
   }
 
   getNumber(n) {
@@ -100,23 +99,26 @@ export default class Jsf {
     return Array.from({ length: n - 1 }).reduce((res) => res + this.one, this.one);
   }
   
-  getString(s) {
-      return s.split('').map((c) => {
+  getString(s = '') {
+    return s.split('').map((c) => {
+          if (!this[c]) {
+            return this.execute(`return String.fromCharCode(${c.charCodeAt(0)})`)
+          }
           return this[c];
       }).join('+');
   }
 
   convertTwoDigitsToString(number) {
     const charNumParts = number.toString().split('')
-    return `${this.getNumber(charNumParts[0])}+[${this.getNumber(charNumParts[1])}]`
+    return `${this.getNumber(charNumParts[0])}+[${this.getNumber(charNumParts[1])}]`;
   }
 
   getMissingLowerCaseLetter(c) {
     if (c.charCodeAt(0) < 98 || c.charCodeAt(0) > 122) {
       return false;
     }
-    const charNumEncoded = this.convertTwoDigitsToString(c.charCodeAt(0) - 87)
-    const radixEncoded = this.convertTwoDigitsToString(c.charCodeAt(0) - 86)
+    const charNumEncoded = this.convertTwoDigitsToString(c.charCodeAt(0) - 87);
+    const radixEncoded = this.convertTwoDigitsToString(c.charCodeAt(0) - 86);
     return `(+(${charNumEncoded}))[${this.toStringStr}](${radixEncoded})`
   }
   
@@ -124,18 +126,23 @@ export default class Jsf {
     return `${this.Function}(${this.getString(s)})()`;
   }
 
+  decode(_) {
+    return Function(`return eval(${_}+[])`)();
+  }
+
   outputCatchRangeErrProp(n) {
-    return this.execute('try{String().normalize(false)}catch(a){return (a+[])[' + n + ']}')
+    return this.execute('try{String().normalize(false)}catch(a){return (a+[])[' + n + ']}');
   }
 
   outputRegExEvoke(n) {
-    return this.execute('return (RegExp()+[])[' + n + ']')
+    return this.execute('return (RegExp()+[])[' + n + ']');
   }
 }
 
 
-
-// console.log(string('return escape'), '\n', eval(string('return escape')));
+const jsf = new Jsf();
+console.log(jsf.execute('console.log(\'yo\')'));
+console.log(jsf.decode(jsf.execute('console.log(\'yo\')')))
 // console.log(eval(`((${zero})[${string('constructor')}]+[])[${number(11)}]`));
 
 // console.log(eval(`(${map.a})[${string('constructor')}][${string('fromCharCode')}](${number(189)})`));
