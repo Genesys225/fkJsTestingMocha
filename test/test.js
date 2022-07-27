@@ -109,9 +109,9 @@ describe("acquire `R` and E to be able to encode RegEx", () => {
 
 describe("acquire `/` and \\ to be able to encode unicode  (\\uXXX) eventually", () => {
   it(`acquire "/" from executing RegEx() => /(?:)/ god knows why :)`, () => {
-    expect(eval(jsf.outputRegExEvoke(0))).equals("/");
-    expect(eval(jsf.outputRegExEvoke(2))).equals("?");
-    expect(eval(jsf.outputRegExEvoke(3))).equals(":");
+    expect(eval(jsf.outputRegExInvoke(0))).equals("/");
+    expect(eval(jsf.outputRegExInvoke(2))).equals("?");
+    expect(eval(jsf.outputRegExInvoke(3))).equals(":");
   });
   it(`acquire "\\" from executing RegEx('/') => /\\//`, () => {
     expect(eval(jsf["'"])).equals("'");
