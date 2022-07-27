@@ -1,5 +1,6 @@
 export default class Jsf {
   constructor() {
+    this.logger = false;
     this.zero = '+[]';
     this.one = '+!+[]';
     this.two = '+!+[]+!+[]';
@@ -77,7 +78,7 @@ export default class Jsf {
      *  9 = S, 14 = g
      *  'a'['constructor']+[] => 'function String() { [native code] }' */
     this.S = `(${this.a}[${this.constructor}]+[])[${this.nine}]`;
-    this.g = `(${this.a}[${this.constructor}]+[])[${this['1']}+[${this.four}]]`;
+    this.g = `(${this.a}[${this.constructor}]+[])[${this.convertTwoDigitsToString(14)}]`;
     this.toStringStr = this.getString('toString');
     this.h = this.getMissingLowerCaseLetter('h');
     this.j = this.getMissingLowerCaseLetter('j');
@@ -114,7 +115,9 @@ export default class Jsf {
       }
       return this[c];
     }).join('+');
-    console.log(encoded.length, 'string', s);
+    if (this.logger) {
+      console.log(encoded.length, 'string', `\x1b[31m'${s}'\x1b[0m`);
+    }
     return encoded;
   }
 
@@ -134,12 +137,14 @@ export default class Jsf {
   
   execute(s) {
     const res = `${this.Function}(${this.getString(s)})()`;
-    console.warn(`Function('${s}')()`, res.length, 'exec', eval(res))
+    if (this.logger) {
+      console.log(`Function(\x1b[31m'${s}'\x1b[0m)()`, res.length, 'exec', `\x1b[36m${eval(res)}\x1b[0m`)
+    }
     return res;
   }
 
   decode(_) {
-    return Function(`return eval(${_}+[])`)();
+    return Function(`return eval(${_})`)();
   }
 
   outputCatchRangeErrProp(n) {
@@ -154,7 +159,7 @@ export default class Jsf {
 
 const jsf = new Jsf();
 // console.log(jsf.execute('console.log(\'yo\')'));
-console.log(jsf.decode(jsf.execute('console.log(\'yo\')')))
+// console.log(jsf.decode(jsf.execute('console.log(\'yo\')')))
 // console.log(eval(`((${zero})[${string('constructor')}]+[])[${number(11)}]`));
 
 // console.log(eval(`(${map.a})[${string('constructor')}][${string('fromCharCode')}](${number(189)})`));
